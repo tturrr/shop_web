@@ -2,13 +2,39 @@
 <!--php와 db teble regi_info 에 연결한다. 그리고
 사용자 정보 id password name email 을 입력받아 저장한다. -->
 <?php
-$conn = mysqli_connect("localhost","root","");
-mysqli_select_db($conn,"regi_info") or die (mysqli_error($conn));
+session_start();
 
-$sql = "INSERT INTO regi_info (id,password,name,email);
+$servername = "localhost";
+$myname = "root";
+$password = "";
+$dbname = "regi_info";
+
+$user_id = $_POST['id'];
+$user_password = $_POST['password'];
+$user_name = $_POST['name'];
+$user_email = $_POST['email'];
+
+  $conn = new mysqli($servername,$myname,$password,$dbname);
+
+
+
+if(!$conn){
+  die ('MySQL connect Error : ' .mysqli_error());
+}
+
+$check = "SELECT * FROM register where id = '$user_id'";
+$result = $conn->query($check);
+if($result->num_rows>1)
+{
+  // echo "중복 id";
+  // echo "<a href=login.php>back page</a>";
+  // exit();
+}
+
+$sql = "INSERT INTO register (id,password,name,email)
 VALUES ('$_POST[id]','$_POST[password]','$_POST[name]','$_POST[email]')";
+$resource= $conn->query($sql);
 
-$conn ->close();
 ?>
 
 
@@ -35,9 +61,11 @@ $conn ->close();
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="images/ico/apple-touch-icon-57-precomposed.png">
+    <script src="js/checkid.php"></script>
 </head><!--/head-->
 
 <body>
+  <script src="/js/jquery-1.7.1.min.js">  </script>
 	<header id="header"><!--header-->
 		<div class="header_top"><!--header_top-->
 			<div class="container">
@@ -70,7 +98,7 @@ $conn ->close();
 				<div class="row">
 					<div class="col-sm-4">
 						<div class="logo pull-left">
-							<a href="index.html"><img src="images/home/logo.png" alt="" /></a>
+							<a href="index.php"><img src="images/home/logo.png" alt="" /></a>
 						</div>
 						<div class="btn-group pull-right">
 							<div class="btn-group">
@@ -125,7 +153,7 @@ $conn ->close();
 						</div>
 						<div class="mainmenu pull-left">
 							<ul class="nav navbar-nav collapse navbar-collapse">
-								<li><a href="index.html">Home</a></li>
+								<li><a href="index.php">Home</a></li>
 								<li class="dropdown"><a href="#">Shop<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
                                         <li><a href="shop.html">Products</a></li>
@@ -169,25 +197,15 @@ $conn ->close();
 								<input type="checkbox" class="checkbox">
 								Keep me signed in
 							</span>
-							<button type="submit" class="btn-danger">Login</button>
+
+							<button type="submit" class="btn-danger">로그인</button>   <button type="button" onclick="location.href='register.php' ">회원가입</button>
 						</form>
 					</div><!--/login form-->
 				</div>
 				<div class="col-sm-1">
-					<h2 class="or">OR</h2>
+
 				</div>
-				<div class="col-sm-4">
-					<div class="signup-form"><!--sign up form-->
-						<h2>New User Signup!</h2>
-						<form method="post"action="login.php">
-              <input type="text" placeholder="id" name="id" />
-              <input type="password" placeholder="Password" name="password"/>
-							<input type="text" placeholder="Name" name="name"/>
-							<input type="email" placeholder="Email Address" name="email" />
-							<button type="submit" class="btn btn-default">Signup</button>
-						</form>
-					</div><!--/sign up form-->
-				</div>
+
 			</div>
 		</div>
 	</section><!--/form-->
