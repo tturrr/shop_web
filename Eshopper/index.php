@@ -1,3 +1,8 @@
+<?php
+include "session.php";
+include "dbConnect.php";
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -27,6 +32,7 @@
 
 <body>
 
+
 	<header id="header"><!--header-->
 		<div class="header_top"><!--header_top-->
 			<div class="container">
@@ -35,9 +41,9 @@
 						<div class="contactinfo">
 							<ul class="nav nav-pills">
 								<li><a href="#"><i class="fa fa-phone"></i> +2 95 01 88 821</a></li>
-								<li><a href="#"><i class="fa fa-envelope"></i>  <?php
-                  echo $_POST["email"];
-                    ?>
+								<li><a href="#">
+             <?php echo $_SESSION['ses_userid'];
+                  ?>
                 </a></li>
 							</ul>
 						</div>
@@ -95,7 +101,18 @@
 								<li><a href="#"><i class="fa fa-star"></i> Wishlist</a></li>
 								<li><a href="checkout.html"><i class="fa fa-crosshairs"></i> Checkout</a></li>
 								<li><a href="cart.html"><i class="fa fa-shopping-cart"></i> Cart</a></li>
-								<li><a href="login.php"><i class="fa fa-lock"></i> Login</a></li>
+
+
+                <?php
+                if(isset($_SESSION['ses_userid'])){
+                  echo "<li><a href='logout.php'>logout</a></li> ";
+                }else {
+                  echo "<li><a href='login.php'>login</a></li> ";
+                }
+                  ?>
+
+
+
 							</ul>
 						</div>
 					</div>
@@ -133,7 +150,7 @@
 										<li><a href="blog-single.html">Blog Single</a></li>
                                     </ul>
                                 </li>
-								<li><a href="404.html">404</a></li>
+
 								<li><a href="contact-us.html">Contact</a></li>
 							</ul>
 						</div>

@@ -1,7 +1,12 @@
 <!DOCTYPE html>
-<?php $_POST["details_id"];
+<?php
+
+include "session.php";
+ include "dbConnect.php";
+
+      $_POST["details_id"];
       $_POST["brand_id"];
- ?>
+   ?>
 
  <script type="text/javascript">
   function mySubmit(index) {
@@ -49,7 +54,8 @@
 						<div class="contactinfo">
 							<ul class="nav nav-pills">
 								<li><a href=""><i class="fa fa-phone"></i> +2 95 01 88 821</a></li>
-								<li><a href=""><i class="fa fa-envelope"></i> info@domain.com</a></li>
+								<li><a href=""></i> <?php echo $_SESSION['ses_userid'];
+                    ?> </a></li>
 							</ul>
 						</div>
 					</div>
@@ -106,7 +112,14 @@
 								<li><a href=""><i class="fa fa-star"></i> Wishlist</a></li>
 								<li><a href="checkout.html"><i class="fa fa-crosshairs"></i> Checkout</a></li>
 								<li><a href="cart.html"><i class="fa fa-shopping-cart"></i> Cart</a></li>
-								<li><a href="login.html"><i class="fa fa-lock"></i> Login</a></li>
+
+                                <?php
+                                if(isset($_SESSION['ses_userid'])){
+                                  echo "<li><a href='logout.php'>logout</a></li> ";
+                                }else {
+                                  echo "<li><a href='login.php'>login</a></li> ";
+                                }
+                                  ?>
 							</ul>
 						</div>
 					</div>
@@ -132,10 +145,10 @@
 								<li class="dropdown"><a href="#" class="active">Shop<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
                                         <li><a href="shop.php" class="active">Products</a></li>
-										<li><a href="product-details.php">Product Details</a></li>
+
 										<li><a href="checkout.html">Checkout</a></li>
 										<li><a href="cart.html">Cart</a></li>
-										<li><a href="login.html">Login</a></li>
+										<li><a href="login.php">Login</a></li>
                                     </ul>
                                 </li>
 								<li class="dropdown"><a href="#">Blog<i class="fa fa-angle-down"></i></a>
@@ -144,7 +157,7 @@
 										<li><a href="blog-single.html">Blog Single</a></li>
                                     </ul>
                                 </li>
-								<li><a href="404.html">404</a></li>
+
 								<li><a href="contact-us.html">Contact</a></li>
 							</ul>
 						</div>
@@ -309,198 +322,103 @@
 				</div>
 
 
-				<div class="col-sm-9 padding-right">
+				<div class='col-sm-9 padding-right'>
 					<div class="features_items"><!--features_items-->
 						<h2 class="title text-center">Features Items</h2>
           </div>
 
           <!--아이템 추가하는 버튼을 구성하여 동적 추가할수 있게해주는 버튼-->
-        <div>
-           <div class="col-sm-4">
-             <h1 class="title"></h1>
-              <div class="product-image-wrapper">
-                <div class="single-products">
-                  <div class="productinfo text-center">
-                    <form ACTION = "product-details.php">
-                      <button class="add_btn" id = "btn1" type="submit"><img class="add_btn_img" src = "images/shop/add.png" ></button>
-                        </div>
-                      </form>
-                      </div>
-                    </div>
-                  </div>
-                </div>
 
+
+      <?php
+      //루트 아이디로 접속하였을때만 쇼핑몰 아이템을 등록 가능한 버튼이 생성 되어 진다.
+          if($_SESSION['ses_userid'] == "root"){
+
+      echo "<div>
+         <div class='col-sm-4'>
+              <h1 class='title'></h1>
+              <div class='product-image-wrapper'>
+              <div class='single-products'>
+                  <div class='productinfo text-center'>
+                   <form ACTION = 'product-details.php'>
+                     <button class='add_btn' id = 'btn1' type='submit'><img class='add_btn_img' src = 'images/shop/add.png' ></button>
+                       </div>
+                     </form>
+                    </div>
+                   </div>
+                  </div>
+                </div>";
+              }
+               ?>
+
+
+               <?php
+               $sql = "SELECT * FROM shop_board order by b_no desc";
+               $result = $dbConnect->query($sql);
+
+                while($row = $result->fetch_assoc()){
+
+
+
+
+                ?>
 
                   <!--샵 첫번째 아이템 부분.-->
-          <form name="myForm" method="$_POST" enctype="multipart/form-data">
+          <form name="myForm" method="post" enctype="multipart/form-data" action="product-details_modify.php?bno=<?php echo $row['b_no'] ?>" >
             <div class="col-sm-4">
 							<div class="product-image-wrapper">
 								<div class="single-products">
 									<div class="productinfo text-center">
-										<img src="<?php echo $_POST['img']?>"  style="height:300px"  alt="">
-                    <input type="hidden" value="<?php echo $_POST['img']?>" name="img" />
+										<img src="<?php echo $row['b_image']?>"  style="height:300px"  alt="">
+                    <input type="hidden" value="<?php echo $row['b_image']?>" name="b_image" />
 
-                    <h2>	<?php echo $_POST["price"]?>원</h2>
-                    <input type="hidden" name="price" value="<?php echo $_POST["price"]?>">
+                    <h2>	<?php echo $row["b_price"]?>원</h2>
+                    <input type="hidden" name="b_price" value="<?php echo $row["b_price"]?>">
 
-                    <p> 	<?php echo $_POST["title_id"]      ?></p>
-                    <input type="hidden" name="title_id" value="<?php echo $_POST["title_id"] ?>" >
-                    <input type="hidden" name="details_id" value="<?php echo $_POST["details_id"]?>" >
-                    <input type="hidden" name="brand_id" value="<?php echo $_POST["brand_id"] ?>" >
+                    <p> 	<?php echo $row["b_title"]      ?></p>
+                    <input type="hidden" name="b_title" value="<?php echo $row['b_title']?>" >
+                    <input type="hidden" name="b_content" value="<?php echo $row["b_content"]?>" >
+                    <input type="hidden" name="b_brand" value="<?php echo $row["b_brand"] ?>" >
 
 									</div>
 									<div class="product-overlay">
 										<div class="overlay-content">
-                      <img src="<?php echo $_POST['img']?>"  style="height:300px"  alt="">
-                      <input type="hidden" value="<?php echo $_POST['img']?>" name="img" />
-											<h2><?php echo $_POST["price"]      ?>원</h2>
-											<p><?php echo $_POST["title_id"];      ?></p>
-										<input type="button" value="자세히 보기" onclick='mySubmit(1)' />
+                      <img src="<?php echo $row['b_image']?>"  style="height:300px"  alt="">
+                      <input type="hidden" value="<?php echo $row['b_image']?>" name="b_image" />
+											<h2><?php echo $row["b_price"]      ?>원</h2>
+											<p><?php echo $row["b_title"];      ?></p>
+										<input type="submit" value="자세히 보기" />
 										</div>
 									</div>
 								</div>
 								<div class="choose">
 									<ul class="nav nav-pills nav-justified">
                     <!-- <form method="get" action="cart.php" enctype="multipart/form-data" id="cart_form"> -->
-
+                        </form>
 
 									    <!-- 여기바로수정해 -->
-                    <i><input type="button" value="장바구니" onclick='mySubmit(2)' style="margin-left:93px" /> </i>
+
 									  <!-- </form> -->
 									</ul>
+                  <form action="cart.php" method="post"enctype="multipart/form-data"  >
+
+
+                    <i><input type="submit" value="장바구니" style="margin-left:93px" /> </i>
+
+                  </form>
 								</div>
 							</div>
-            </form>
+
 
 						</div>
+            <?php
+              }
+            ?>
 
-						<div class="col-sm-4">
-							<div class="product-image-wrapper">
-								<div class="single-products">
-									<div class="productinfo text-center">
-										<img src="images/shop/product10.jpg" alt="" />
-										<h2>$56</h2>
-										<p>Easy 폴로 Edition</p>
-										<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-									</div>
-									<div class="product-overlay">
-										<div class="overlay-content">
-											<h2>$56</h2>
-											<p>Easy Polo Black Edition</p>
-											<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-										</div>
-									</div>
-								</div>
-								<div class="choose">
-									<ul class="nav nav-pills nav-justified">
-										<li><a href=""><i class="fa fa-plus-square"></i>Add to wishlist</a></li>
-										<li><a href=""><i class="fa fa-plus-square"></i>Add to compare</a></li>
-									</ul>
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="product-image-wrapper">
-								<div class="single-products">
-									<div class="productinfo text-center">
-										<img src="images/shop/product9.jpg" alt="" />
-										<h2>$56</h2>
-										<p>Easy Polo Black Edition</p>
-										<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-									</div>
-									<div class="product-overlay">
-										<div class="overlay-content">
-											<h2>$56</h2>
-											<p>Easy Polo Black Edition</p>
-											<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-										</div>
-									</div>
-									<img src="images/home/new.png" class="new" alt="" />
-								</div>
-								<div class="choose">
-									<ul class="nav nav-pills nav-justified">
-										<li><a href=""><i class="fa fa-plus-square"></i>Add to wishlist</a></li>
-										<li><a href=""><i class="fa fa-plus-square"></i>Add to compare</a></li>
-									</ul>
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="product-image-wrapper">
-								<div class="single-products">
-									<div class="productinfo text-center">
-										<img src="images/shop/product8.jpg" alt="" />
-										<h2>$56</h2>
-										<p>Easy Polo Black Edition</p>
-										<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-									</div>
-									<div class="product-overlay">
-										<div class="overlay-content">
-											<h2>$56</h2>
-											<p>Easy Polo Black Edition</p>
-											<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-										</div>
-									</div>
-									<img src="images/home/sale.png" class="new" alt="" />
-								</div>
-								<div class="choose">
-									<ul class="nav nav-pills nav-justified">
-										<li><a href=""><i class="fa fa-plus-square"></i>Add to wishlist</a></li>
-										<li><a href=""><i class="fa fa-plus-square"></i>Add to compare</a></li>
-									</ul>
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-4">
-							<div class="product-image-wrapper">
-								<div class="single-products">
-									<div class="productinfo text-center">
-										<img src="images/shop/product7.jpg" alt="" />
-										<h2>$56</h2>
-										<p>Easy Polo Black Edition</p>
-										<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-									</div>
-									<div class="product-overlay">
-										<div class="overlay-content">
-											<h2>$56</h2>
-											<p>Easy Polo Black Edition</p>
-											<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-										</div>
-									</div>
-								</div>
-								<div class="choose">
-									<ul class="nav nav-pills nav-justified">
-										<li><a href=""><i class="fa fa-plus-square"></i>Add to wishlist</a></li>
-										<li><a href=""><i class="fa fa-plus-square"></i>Add to compare</a></li>
-									</ul>
-								</div>
-							</div>
-						</div>
+
+
               <!--샵 첫번째 아이템 부분 이곳에 추가버튼을 만들어 동적으로 아이템이 추가 되게 만든다..-->
-            <div class="col-sm-4">
-              <div class="product-image-wrapper">
-                <div class="single-products">
-                  <div class="productinfo text-center">
-                    <img src="images/shop/product12.jpg" alt="" />
-                    <h2>	<?php echo $_POST["price"];      ?></h2>
-                    <p>Easy Polo Black Edition</p>
-                    <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-                  </div>
-                  <div class="product-overlay">
-                    <div class="overlay-content">
-                      <h2>$56</h2>
-                      <p>Easy Polo Black Edition</p>
-                      <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-                    </div>
-                  </div>
-                </div>
-                <div class="choose">
-                  <ul class="nav nav-pills nav-justified">
-                    <li><a href=""><i class="fa fa-plus-square"></i>Add to wishlist</a></li>
-                    <li><a href=""><i class="fa fa-plus-square"></i>Add to compare</a></li>
-                  </ul>
-                </div>
-              </div>
+
 
 
 					</div><!--features_ite`````ms-->

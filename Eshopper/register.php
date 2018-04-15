@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 
+
+
 <html lang="en">
 <head>
   <title>회원가입</title>
@@ -44,7 +46,6 @@
             	<input type="text" placeholder="이름" name="memberName" class="memberName"/>
             	<input type="email" placeholder="email" name="memberEmailAddress" class="memberEmailAddress" />
                 <div class="memberEmailAddressComment comment"></div>
-
 
 							<input type="submit" class="btn-danger" value="작성완료"></input>
 						</form>

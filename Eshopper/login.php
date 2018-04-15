@@ -22,14 +22,6 @@ if(!$conn){
   die ('MySQL connect Error : ' .mysqli_error());
 }
 
-$check = "SELECT * FROM register where id = '$user_id'";
-$result = $conn->query($check);
-if($result->num_rows>1)
-{
-  // echo "중복 id";
-  // echo "<a href=login.php>back page</a>";
-  // exit();
-}
 
 $sql = "INSERT INTO register (id,password,name,email)
 VALUES ('$_POST[id]','$_POST[password]','$_POST[name]','$_POST[email]')";
@@ -61,7 +53,8 @@ $resource= $conn->query($sql);
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="images/ico/apple-touch-icon-57-precomposed.png">
-    <script src="js/checkid.php"></script>
+    <script src="js/mySignInForm.js"></script>
+
 </head><!--/head-->
 
 <body>
@@ -131,7 +124,7 @@ $resource= $conn->query($sql);
 								<li><a href=""><i class="fa fa-star"></i> Wishlist</a></li>
 								<li><a href="checkout.html"><i class="fa fa-crosshairs"></i> Checkout</a></li>
 								<li><a href="cart.html"><i class="fa fa-shopping-cart"></i> Cart</a></li>
-								<li><a href="login.html" class="active"><i class="fa fa-lock"></i> Login</a></li>
+								<li><a href="login.php" class="active"><i class="fa fa-lock"></i> Login</a></li>
 							</ul>
 						</div>
 					</div>
@@ -156,7 +149,7 @@ $resource= $conn->query($sql);
 								<li><a href="index.php">Home</a></li>
 								<li class="dropdown"><a href="#">Shop<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
-                                        <li><a href="shop.html">Products</a></li>
+                                        <li><a href="shop.php">Products</a></li>
 										<li><a href="product-details.html">Product Details</a></li>
 										<li><a href="checkout.html">Checkout</a></li>
 										<li><a href="cart.html">Cart</a></li>
@@ -169,7 +162,7 @@ $resource= $conn->query($sql);
 										<li><a href="blog-single.html">Blog Single</a></li>
                                     </ul>
                                 </li>
-								<li><a href="404.html">404</a></li>
+
 								<li><a href="contact-us.html">Contact</a></li>
 							</ul>
 						</div>
@@ -190,9 +183,9 @@ $resource= $conn->query($sql);
 				<div class="col-sm-4 col-sm-offset-1">
 					<div class="login-form"><!--login form-->
 						<h2>Login to your account</h2>
-						<form action="index.php" method="post">
-							<input type="text" placeholder="id" name="id"/>
-							<input type="password" placeholder="password" name="password" />
+						<form action="signIn.php" method="post" onsubmit="return checkSubmit();">
+							<input type="text" placeholder="id" name="memberId"class="memberId"/>
+							<input type="password" placeholder="password" name="memberPw" class="memberPw" />
 							<span>
 								<input type="checkbox" class="checkbox">
 								Keep me signed in

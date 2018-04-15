@@ -1,5 +1,9 @@
+
+
 <?php
     include "dbConnect.php";
+
+    $replaceURL = 'login.php';  // location.replace 를 사용하여 저홈페이지로 확인버튼 누르지않아도 바로 이동이 가능하다.
 
     $memberId = $_POST['memberId'];
     $memberName = $_POST['memberName'];
@@ -7,15 +11,15 @@
     $memberPw2 = $_POST['memberPw2'];
     $memberEmailAddress = $_POST['memberEmailAddress'];
 
-
     //PHP에서 유효성 재확인
 
     //아이디 중복검사.
     $sql = "SELECT * FROM register WHERE memberId = '{$memberId}'";
     $res = $dbConnect->query($sql);
     if($res->num_rows >= 1){
-        echo '이미 존재하는 아이디가 있습니다.';
-        exit;
+
+      echo("<script>alert('이미 존재하는 아이디가 있습니다.');</script>");
+      exit;
     }
 
     //비밀번호 일치하는지 확인
@@ -45,6 +49,13 @@
     VALUES('{$memberId}','{$memberPw}','{$memberName}','{$memberEmailAddress}');";
 
     if($dbConnect->query($sql)){
-        echo '회원가입 성공';
+
+
+?>
+        <script>
+      alert('회원가입 성공');
+      location.replace("<?php echo $replaceURL?>");
+      </script>
+<?php
     }
 ?>

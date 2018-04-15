@@ -1,11 +1,23 @@
+<?php
+include "session.php";
+ include "dbConnect.php";
+
+ $bNo = $_GET['bno'];
+
+
+
+$sql = 'SELECT b_no, b_title, b_content, b_price, b_hit, b_brand, b_image from shop_board where b_no = ' . $bNo;
+
+$result = $dbConnect->query($sql);
+
+$row = $result->fetch_assoc();
+
+ ?>
+
+
 <!DOCTYPE html>
 
-        <!--php 이미지 업로드 부분.-->
-        <?php
-        $source = $_FILES['profile']['tmp_name'];
-        $dest = "./".basename($_FILES['profile']['name']);
-        move_uploaded_file($source,$dest);
-         ?>
+
 
 
 
@@ -139,7 +151,7 @@
 										<li><a href="blog-single.html">Blog Single</a></li>
                                     </ul>
                                 </li>
-								<li><a href="404.html">404</a></li>
+
 								<li><a href="contact-us.html">Contact</a></li>
 							</ul>
 						</div>
@@ -190,8 +202,7 @@
                 <form method="post" action="shop.php" >
 
 
-                  <img src="<?php echo $_GET["img"]?>" alt="" name="profile">
-
+                  <img src="<?php echo $row["b_image"]?>" alt="" name="profile">
 
 
 
@@ -242,18 +253,18 @@
 
 								<img src="images/product-details/new.jpg" class="newarrival" alt="" />
 
-                  <h2> 	<?php echo $_GET["title_id"]      ?></h2>
+                  <h2> 	<?php echo $row["b_title"]      ?></h2>
 
 
 								<span>
 									<span>가격 </span>
 
-                      <h2>	<?php echo $_GET["price"]?></h2>
+                      <h2>	<?php echo $row["b_price"]?></h2>
 
 
 								</span>
 
-								<p><b>브랜드:</b> <?php echo $_GET["brand_id"]?> </p>
+								<p><b>브랜드:</b> <?php echo $row["b_brand"]?> </p>
 
 
                   <!--메인사진을 업로드하는 부분 입니다.-->
@@ -289,7 +300,7 @@
 
 
              <p>
-               <?php echo $_GET["details_id"] ?>
+               <?php echo $row["b_content"] ?>
              </p>
 
 

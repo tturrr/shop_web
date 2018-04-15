@@ -2,13 +2,12 @@
 
         <!--php 이미지 업로드 부분.-->
         <?php
-
+        include "session.php";
+         include "dbConnect.php";
 
         $source = $_FILES['profile']['tmp_name'];
         $dest = "./".basename($_FILES['profile']['name']);
         move_uploaded_file($source,$dest);
-
-
 
          ?>
 
@@ -48,7 +47,8 @@
 						<div class="contactinfo">
 							<ul class="nav nav-pills">
 								<li><a href=""><i class="fa fa-phone"></i> +2 95 01 88 821</a></li>
-								<li><a href=""><i class="fa fa-envelope"></i> info@domain.com</a></li>
+								<li><a href=""><?php echo $_SESSION['ses_userid'];
+                    ?> </a></li>
 							</ul>
 						</div>
 					</div>
@@ -105,7 +105,13 @@
 								<li><a href=""><i class="fa fa-star"></i> Wishlist</a></li>
 								<li><a href="checkout.html"><i class="fa fa-crosshairs"></i> Checkout</a></li>
 								<li><a href="cart.html"><i class="fa fa-shopping-cart"></i> Cart</a></li>
-								<li><a href="login.html"><i class="fa fa-lock"></i> Login</a></li>
+                <?php
+                if(isset($_SESSION['ses_userid'])){
+                  echo "<li><a href='logout.php'>logout</a></li> ";
+                }else {
+                  echo "<li><a href='login.php'>login</a></li> ";
+                }
+                  ?>
 							</ul>
 						</div>
 					</div>
@@ -132,7 +138,7 @@
 								<li class="dropdown"><a href="#">Shop<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
                                         <li><a href="shop.php">Products</a></li>
-										<li><a href="product-details.html" class="active">Product Details</a></li>
+
 										<li><a href="checkout.html">Checkout</a></li>
 										<li><a href="cart.html">Cart</a></li>
 										<li><a href="login.html">Login</a></li>
@@ -144,7 +150,7 @@
 										<li><a href="blog-single.html">Blog Single</a></li>
                                     </ul>
                                 </li>
-								<li><a href="404.html">404</a></li>
+
 								<li><a href="contact-us.html">Contact</a></li>
 							</ul>
 						</div>
@@ -192,12 +198,14 @@
 					<div class="product-details"><!--product-details-->
 						<div class="col-sm-5">
 							<div class="view-product">
-                <form method="POST" action="shop.php" >
+
+
+                <form method="POST" action="write_shop.php" >
 
 
                   <img src="<?=$_FILES['profile']['name']?>" alt="" name="profile">
 
-                  <input type="hidden" name="img" value="<?=$_FILES['profile']['name']?>" >
+                  <input type="hidden" name="b_image" value="<?=$_FILES['profile']['name']?>" >
 
 
 								<h3>ZOOM</h3>
@@ -247,16 +255,16 @@
                 <h4>제목</h4>
 								<img src="images/product-details/new.jpg" class="newarrival" alt="" />
 
-                    <input type="text" placeholder="상품 제목을 적어주세요." style="width:300px; height:30px;" name = "title_id"/>
+                    <input type="text" placeholder="상품 제목을 적어주세요." style="width:300px; height:30px;" name = "b_title"/>
 
 
 								<span>
 									<span>가격 </span>
                     <input type="number" placeholder="0" style="width:110px; height:30px;"
-                    id ="price" name = "price"  /> 원
+                    id ="b_price" name = "b_price"  /> 원
 								</span>
 
-								<p><b>브랜드:</b> <input type="text" name ="brand_id"/>  </p>
+								<p><b>브랜드:</b> <input type="text" name ="b_brand"/>  </p>
 
 
                   <!--메인사진을 업로드하는 부분 입니다.-->
@@ -286,7 +294,7 @@
 
                 <!--이곳에다가 세부정보를 적는다.-->
 
-               <textarea cols = "5" rows="20" name="details_id">
+               <textarea cols = "5" rows="20" name="b_content">
 
                </textarea>
 
@@ -296,9 +304,6 @@
 
 
               <!--게시글 작성 완료 버튼으로 완료누를시 정보를 shop.php로 옮긴다.-->
-
-
-
 
 
               </form>

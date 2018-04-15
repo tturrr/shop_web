@@ -1,3 +1,13 @@
+
+
+<?php
+
+include "session.php";
+ include "dbConnect.php";
+
+?>
+
+
 <!DOCTYPE html>
 <script>
 function calculationtest(){
@@ -44,7 +54,8 @@ function calculationtest(){
 						<div class="contactinfo">
 							<ul class="nav nav-pills">
 								<li><a href=""><i class="fa fa-phone"></i> +2 95 01 88 821</a></li>
-								<li><a href=""><i class="fa fa-envelope"></i> info@domain.com</a></li>
+								<li><a href=""><?php echo $_SESSION['ses_userid'];
+                    ?> </a></li>
 							</ul>
 						</div>
 					</div>
@@ -68,7 +79,7 @@ function calculationtest(){
 				<div class="row">
 					<div class="col-sm-4">
 						<div class="logo pull-left">
-							<a href="index.html"><img src="images/home/logo.png" alt="" /></a>
+							<a href="index.php"><img src="images/home/logo.png" alt="" /></a>
 						</div>
 						<div class="btn-group pull-right">
 							<div class="btn-group">
@@ -101,7 +112,13 @@ function calculationtest(){
 								<li><a href=""><i class="fa fa-star"></i> Wishlist</a></li>
 								<li><a href="checkout.html"><i class="fa fa-crosshairs"></i> Checkout</a></li>
 								<li><a href="cart.html" class="active"><i class="fa fa-shopping-cart"></i> Cart</a></li>
-								<li><a href="login.html"><i class="fa fa-lock"></i> Login</a></li>
+								<?php
+								if(isset($_SESSION['ses_userid'])){
+									echo "<li><a href='logout.php'>logout</a></li> ";
+								}else {
+									echo "<li><a href='login.php'>login</a></li> ";
+								}
+									?>
 							</ul>
 						</div>
 					</div>
@@ -123,7 +140,7 @@ function calculationtest(){
 						</div>
 						<div class="mainmenu pull-left">
 							<ul class="nav navbar-nav collapse navbar-collapse">
-								<li><a href="index.html">Home</a></li>
+								<li><a href="index.php">Home</a></li>
 								<li class="dropdown"><a href="#">Shop<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
                                         <li><a href="shop.html">Products</a></li>
@@ -139,7 +156,7 @@ function calculationtest(){
 										<li><a href="blog-single.html">Blog Single</a></li>
                                     </ul>
                                 </li>
-								<li><a href="404.html">404</a></li>
+
 								<li><a href="contact-us.html">Contact</a></li>
 							</ul>
 						</div>
