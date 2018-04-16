@@ -1,17 +1,42 @@
-<!DOCTYPE html>
+
 
         <!--php 이미지 업로드 부분.-->
         <?php
         include "session.php";
          include "dbConnect.php";
 
-        $source = $_FILES['profile']['tmp_name'];
-        $dest = "./".basename($_FILES['profile']['name']);
+         if(isset($_GET['bno'])) {
+
+         		$bNo = $_GET['bno'];
+
+         	}
+
+          if(isset($bNo)) {
+
+          		$sql = 'SELECT b_no, b_title, b_content, b_price, b_hit, b_brand, b_image from shop_board where b_no = ' . $bNo;
+
+          	   $result = $dbConnect->query($sql);
+
+          		$row = $result->fetch_assoc();
+
+              $bImage = $_POST['b_image'];
+
+              $sql = 'UPDATE shop_board set b_image="' . $bImage . '" where b_no = ' . $bNo;
+          	}
+
+
+
+
+
+        $source = $_FILES['b_image']['tmp_name'];
+        $dest = "./".basename($_FILES['b_image']['name']);
         move_uploaded_file($source,$dest);
+
+
 
          ?>
 
-
+<!DOCTYPE html>
 
 <html lang="en">
 <head>
@@ -30,7 +55,7 @@
     <!--[if lt IE 9]>
     <script src="js/html5shiv.js"></script>
     <script src="js/respond.min.js"></script>
-    <![endif]-->/
+    <![endif]-->
     <link rel="shortcut icon" href="images/ico/favicon.ico">
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="images/ico/apple-touch-icon-144-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
@@ -179,10 +204,23 @@
               <div class="modal-content">
 <div class="modal-header">
 <div class="modal-body">
+  <?php if(isset($bNo))
+  {?>
+    <form action="product-details.php?bno=<?php echo $row['b_no'] ?>" method="post" enctype="multipart/form-data">
+               <input type="file" name="b_image" multiple accept='image/*'>
+               <input type="submit">
+           </form>
+<?php  }
+?>
+  <?php if(!isset($bNo))
+  {?>
   <form action="product-details.php" method="post" enctype="multipart/form-data">
-             <input type="file" name="profile" multiple accept='image/*'>
+             <input type="file" name="b_image" multiple accept='image/*'>
              <input type="submit">
          </form>
+        <?php
+}?>
+
     <div class="modal-footer">
       </div>
         </div>
@@ -201,11 +239,38 @@
 
 
                 <form method="POST" action="write_shop.php" >
+                  <?php
+
+                      if(isset($bNo))
+                      {
+
+                         echo '<input type="hidden" name="bno" value="' . $bNo . '">';
+
+                       }
+
+                     ?>
 
 
-                  <img src="<?=$_FILES['profile']['name']?>" alt="" name="profile">
+                     <?php
+                     if(isset($bNo)){
+                       ?>
+                  <img src="<?=$row['b_image']?>" alt="" name="b_image" >
+                  <input type="hidden" name="b_image" value="<?=$row['b_image']?>" >
 
-                  <input type="hidden" name="b_image" value="<?=$_FILES['profile']['name']?>" >
+                  <?php
+                  }
+                ?>
+                <?php
+                if(!isset($bNo)){
+                  ?>
+                  <img src="<?=$_FILES['b_image']['name']?>" alt="" name="b_image" >
+                  <input type="hidden" name="b_image" value="<?=$_FILES['b_image']['name']?>" >
+
+                  <?php
+                }
+                ?>
+
+
 
 
 								<h3>ZOOM</h3>
@@ -255,21 +320,21 @@
                 <h4>제목</h4>
 								<img src="images/product-details/new.jpg" class="newarrival" alt="" />
 
-                    <input type="text" placeholder="상품 제목을 적어주세요." style="width:300px; height:30px;" name = "b_title"/>
+                    <input type="text" value="<?php echo isset($row['b_title'])?$row['b_title']:null?>" placeholder="상품 제목을 적어주세요." style="width:300px; height:30px;" name = "b_title"/>
 
 
 								<span>
 									<span>가격 </span>
-                    <input type="number" placeholder="0" style="width:110px; height:30px;"
+                    <input type="number" value="<?php echo isset($row['b_price'])?$row['b_price']:null?>" placeholder="0" style="width:110px; height:30px;"
                     id ="b_price" name = "b_price"  /> 원
 								</span>
 
-								<p><b>브랜드:</b> <input type="text" name ="b_brand"/>  </p>
+								<p><b>브랜드:</b> <input type="text" value="<?php echo isset($row['b_brand'])?$row['b_brand']:null?>" name ="b_brand"/>  </p>
 
 
                   <!--메인사진을 업로드하는 부분 입니다.-->
 
-                        <button type="button" data-toggle="modal" data-target="#myModal" class="btn btn-fefault cart">
+                         <button type="button" data-toggle="modal" data-target="#myModal" class="btn btn-fefault cart">
 
                         <a data-toggle="modal" href="#myModal">이미지 첨부</a>
 
@@ -294,8 +359,8 @@
 
                 <!--이곳에다가 세부정보를 적는다.-->
 
-               <textarea cols = "5" rows="20" name="b_content">
-
+               <textarea cols = "5" rows="20"  name="b_content" >
+              <?php echo isset($row['b_content'])?$row['b_content']:null?>
                </textarea>
 
      <button input type="submit" class="btn btn-default pull-right" style="background-color:#FE980F" >

@@ -35,15 +35,19 @@ $row = $result->fetch_assoc();
     <link href="css/animate.css" rel="stylesheet">
 	<link href="css/main.css" rel="stylesheet">
 	<link href="css/responsive.css" rel="stylesheet">
+  <link href="css/modify_delete.css" rel="stylesheet">
     <!--[if lt IE 9]>
     <script src="js/html5shiv.js"></script>
     <script src="js/respond.min.js"></script>
-    <![endif]-->/
+    <![endif]-->
     <link rel="shortcut icon" href="images/ico/favicon.ico">
     <link rel="apple-touch-icon-precomposed" sizes="144x144" href="images/ico/apple-touch-icon-144-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="images/ico/apple-touch-icon-57-precomposed.png">
+
+
+
 </head><!--/head-->
 
 <body>
@@ -55,7 +59,8 @@ $row = $result->fetch_assoc();
 						<div class="contactinfo">
 							<ul class="nav nav-pills">
 								<li><a href=""><i class="fa fa-phone"></i> +2 95 01 88 821</a></li>
-								<li><a href=""><i class="fa fa-envelope"></i> info@domain.com</a></li>
+                <li><a href=""><?php echo $_SESSION['ses_userid'];
+                    ?> </a></li>
 							</ul>
 						</div>
 					</div>
@@ -112,7 +117,13 @@ $row = $result->fetch_assoc();
 								<li><a href=""><i class="fa fa-star"></i> Wishlist</a></li>
 								<li><a href="checkout.html"><i class="fa fa-crosshairs"></i> Checkout</a></li>
 								<li><a href="cart.html"><i class="fa fa-shopping-cart"></i> Cart</a></li>
-								<li><a href="login.html"><i class="fa fa-lock"></i> Login</a></li>
+                <?php
+                if(isset($_SESSION['ses_userid'])){
+                  echo "<li><a href='logout.php'>logout</a></li> ";
+                }else {
+                  echo "<li><a href='login.php'>login</a></li> ";
+                }
+                  ?>
 							</ul>
 						</div>
 					</div>
@@ -199,10 +210,11 @@ $row = $result->fetch_assoc();
 					<div class="product-details"><!--product-details-->
 						<div class="col-sm-5">
 							<div class="view-product">
-                <form method="post" action="shop.php" >
+
 
 
                   <img src="<?php echo $row["b_image"]?>" alt="" name="profile">
+              
 
 
 
@@ -264,7 +276,8 @@ $row = $result->fetch_assoc();
 
 								</span>
 
-								<p><b>브랜드:</b> <?php echo $row["b_brand"]?> </p>
+								<p><b>브랜드: </b> <?php echo $row["b_brand"]?> </p>
+                <p><b>조회수: </b> <?php echo $row["b_hit"]?> </p>
 
 
                   <!--메인사진을 업로드하는 부분 입니다.-->
@@ -276,6 +289,33 @@ $row = $result->fetch_assoc();
 
 						</div>
 					</div><!--/product-details-->
+
+          <!-- 조건을 주어서 root 아이디로 들어왔을떄만 수정과 삭제가 가능하게 만든다.  -->
+
+                      <?php
+
+                        if($_SESSION['ses_userid'] == "root"){
+                          ?>
+                        <div style="margin-left : 670px;">
+
+                      <div class="btn btn-default get" >
+                        <a href="./product-details.php?bno=<?php echo $row['b_no'] ?>">수정</a>
+                      </div>
+                        <div class="btn btn-default get">
+                             <a href="./delete.php">삭제</a>
+                        </div>
+
+                          <div class="btn btn-default get">
+                            <a href="./">목록</a>
+                          </div>
+                            </div>
+
+
+                          <?php
+
+                       }
+                       ?>
+                       <!--여기까지가 root 로 들어왔을때 수정삭제 가능하도록하는 부분. -->
 
 					<div class="category-tab shop-details-tab"><!--category-tab-->
 						<div class="col-sm-12">
@@ -289,6 +329,7 @@ $row = $result->fetch_assoc();
 						</div>
 						<div class="tab-content">
 							<div class="tab-pane fade" id="details" >
+
 
 
 
@@ -306,9 +347,7 @@ $row = $result->fetch_assoc();
 
 
 
-                                 <button input type="submit" class="btn btn-default pull-right" style="background-color:#FE980F" >
-                                   Submit
-                                 </button>
+
 							</div>
 
               <!--게시글 작성 완료 버튼으로 완료누를시 정보를 shop.php로 옮긴다.-->
@@ -317,8 +356,6 @@ $row = $result->fetch_assoc();
 
 
 
-              </form>
-
 
 
 							<div class="tab-pane fade" id="companyprofile" >
@@ -326,7 +363,7 @@ $row = $result->fetch_assoc();
 									<div class="product-image-wrapper">
 										<div class="single-products">
 											<div class="productinfo text-center">
-												<img src="images/home/gallery1.jpg" alt="" />
+												<img src="imzages/home/gallery1.jpg" alt="" />
 												<h2>$56</h2>
 												<p>Easy Polo Black Edition</p>
 												<button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>

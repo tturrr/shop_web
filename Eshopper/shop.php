@@ -333,21 +333,24 @@ include "session.php";
       <?php
       //루트 아이디로 접속하였을때만 쇼핑몰 아이템을 등록 가능한 버튼이 생성 되어 진다.
           if($_SESSION['ses_userid'] == "root"){
+            ?>
+      <div>
+         <div class="col-sm-4">
+              <h1 class="title"></h1>
+              <div class="product-image-wrapper">
+              <div class="single-products">
+                  <div class="productinfo text-center">
+                   <form ACTION = "product-details.php" >
 
-      echo "<div>
-         <div class='col-sm-4'>
-              <h1 class='title'></h1>
-              <div class='product-image-wrapper'>
-              <div class='single-products'>
-                  <div class='productinfo text-center'>
-                   <form ACTION = 'product-details.php'>
-                     <button class='add_btn' id = 'btn1' type='submit'><img class='add_btn_img' src = 'images/shop/add.png' ></button>
+                     <button class="add_btn" id = "btn1" type="submit"><img class="add_btn_img" src = "images/shop/add.png" ></button>
+                     <input type="hidden" value="<?php echo $row['b_hit']?>" >
                        </div>
                      </form>
                     </div>
                    </div>
                   </div>
-                </div>";
+                </div>
+                <?php
               }
                ?>
 
@@ -404,6 +407,8 @@ include "session.php";
 
 
                     <i><input type="submit" value="장바구니" style="margin-left:93px" /> </i>
+
+
 
                   </form>
 								</div>
