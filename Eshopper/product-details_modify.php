@@ -12,6 +12,35 @@ $result = $dbConnect->query($sql);
 
 $row = $result->fetch_assoc();
 
+if(!empty($bNo) && empty($_COOKIE['shop_board_' . $bNo])) {
+
+		$sql = 'UPDATE shop_board set b_hit = b_hit + 1 where b_no = ' . $bNo;
+
+		$result = $dbConnect->query($sql);
+
+		if(empty($result)) {
+
+			?>
+
+			<script>
+
+				alert('오류가 발생했습니다.');
+
+				history.back();
+
+			</script>
+
+			<?php
+
+		} else {
+
+			setcookie('shop_board_' . $bNo, TRUE, time() + (60 * 60 * 24), '/');
+
+		}
+
+	}
+
+
  ?>
 
 
@@ -45,6 +74,7 @@ $row = $result->fetch_assoc();
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="images/ico/apple-touch-icon-57-precomposed.png">
+    <script src="./js/jquery-2.1.3.min.js"></script>
 
 
 
@@ -214,7 +244,7 @@ $row = $result->fetch_assoc();
 
 
                   <img src="<?php echo $row["b_image"]?>" alt="" name="profile">
-              
+
 
 
 
@@ -290,6 +320,13 @@ $row = $result->fetch_assoc();
 						</div>
 					</div><!--/product-details-->
 
+          <?php
+
+            if($_SESSION['ses_userid'] == "root"){
+              ?>
+                    <h3 style="margin-left : 730px;">상품</h3>
+                    <?php
+                  }?>
           <!-- 조건을 주어서 root 아이디로 들어왔을떄만 수정과 삭제가 가능하게 만든다.  -->
 
                       <?php
@@ -301,19 +338,26 @@ $row = $result->fetch_assoc();
                       <div class="btn btn-default get" >
                         <a href="./product-details.php?bno=<?php echo $row['b_no'] ?>">수정</a>
                       </div>
+
                         <div class="btn btn-default get">
-                             <a href="./delete.php">삭제</a>
+                             <a href="./delete_shop.php?bno=<?php echo $row['b_no'] ?>">삭제</a>
                         </div>
 
-                          <div class="btn btn-default get">
-                            <a href="./">목록</a>
-                          </div>
-                            </div>
-
-
+                        <div class="btn btn-default get">
+                             <a href="./shop.php">목록</a>
+                           </div>
+                             </div>
                           <?php
-
+                       }else {
+                         ?>
+                           <div style="margin-left : 755px;">
+                             <div class="btn btn-default get">
+                                  <a href="./shop.php">상품 목록</a>
+                                </div>
+                                  </div>
+                                  <?php
                        }
+
                        ?>
                        <!--여기까지가 root 로 들어왔을때 수정삭제 가능하도록하는 부분. -->
 
@@ -321,8 +365,7 @@ $row = $result->fetch_assoc();
 						<div class="col-sm-12">
 							<ul class="nav nav-tabs">
 								<li><a href="#details" data-toggle="tab">Details</a></li>
-								<li><a href="#companyprofile" data-toggle="tab">Company Profile</a></li>
-								<li><a href="#tag" data-toggle="tab">Tag</a></li>
+
 								<li class="active"><a href="#reviews" data-toggle="tab">Reviews (5)</a></li>
 							</ul>
 
@@ -427,29 +470,232 @@ $row = $result->fetch_assoc();
 								</div>
 							</div>
 
-							<div class="tab-pane fade active in" id="reviews" >
-								<div class="col-sm-12">
-									<ul>
-										<li><a href=""><i class="fa fa-user"></i>EUGEN</a></li>
-										<li><a href=""><i class="fa fa-clock-o"></i>12:41 PM</a></li>
-										<li><a href=""><i class="fa fa-calendar-o"></i>31 DEC 2014</a></li>
-									</ul>
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</p>
-									<p><b>Write Your Review</b></p>
+              <!-- 댓글을 작성할 수 있다.-->
+              <div class="tab-pane fade active in" id="reviews" >
+                <div class="col-sm-12">
+                  <ul>
+                    <form action="comment_update.php" method="post">
+                      <input type="hidden" name="bno" value="<?php echo $bNo?>">
+                      <input type="hidden" name="coId" id="coId" value="<?php echo $_SESSION['ses_userid'];?>">
+                      <input type="hidden" name="cdate" id="cdate" value="<?php echo date("Y-m-d H:i:s");?>">
+                    <li><i class="fa fa-user"></i> <?php echo $_SESSION['ses_userid'];?></p></li>
+                    <li><i class="fa fa-calendar-o"></i><?php echo date("Y-m-d H:i:s");?></li>
+                  </ul>
 
-									<form action="#">
-										<span>
-											<input type="text" placeholder="Your Name"/>
-											<input type="email" placeholder="Email Address"/>
-										</span>
-										<textarea name="" ></textarea>
-										<b>Rating: </b> <img src="images/product-details/rating.png" alt="" />
-										<button type="button" class="btn btn-default pull-right">
-											Submit
-										</button>
-									</form>
-								</div>
-							</div>
+
+
+
+                    <textarea placeholder="댓글을 작성하여 주세요." style="color:Black "name="coContent"id="coContent" ></textarea>
+
+                    <button input type="submit" class="btn btn-default pull-right" style="background-color:#FE980F" >
+                      작성완료
+                       </button>
+
+
+                  </form>
+                </div>
+              </div>
+
+
+
+                  <!--댓글의 댓글을 달수 있도록 구현하는 부분-->
+
+              <?php
+
+	             $sql = 'SELECT * from comment where co_no=co_order and b_no ="'. $bNo .'" order by co_no desc';
+
+	              $result = $dbConnect->query($sql);
+                ?>
+                <div id="commentView">
+                <form action="comment_shop_update.php" method="post">
+
+		              <input type="hidden" name="bno" value="<?php echo $bNo?>">
+                  <?php
+
+		                while($row = $result->fetch_assoc()) {
+	                  ?>
+
+
+
+
+  <div   class="tab-pane fade active in" id="reviews" >
+    <div class="col-sm-12" >
+      <ul>
+        <li><i class="fa fa-user"></i> <?php echo $row['co_id'];?></p></li>
+        <li><i class="fa fa-calendar-o"></i><?php echo $row['date']?></li>
+      </ul>
+      <div class="commentBtn">
+      <a href="#" class="comt write">댓글</a>
+    <?php
+    if($_SESSION['ses_userid'] == $row['co_id']){
+      ?>
+      <a href="#" class="comt modify">수정</a>
+
+    <a href="#" class="comt delete">삭제</a>
+    <?php
+  }
+
+  $sql2 = 'SELECT * from comment where co_no!=co_order and co_order=' . $row['co_no'];
+
+  					$result2 = $dbConnect->query($sql2);
+
+
+
+  					while($row2 = $result2->fetch_assoc()) {
+
+  				?>
+          <ul class="twoDepth">
+
+					<li>
+
+            <div id="co_<?php echo $row2['co_no']?>" class="commentSet">
+
+            							<div class="commentInfo">
+
+            								<div class="commentId">작성자:  <span class="coId"><?php echo $row2['co_id']?></span></div>
+
+            								<div class="commentBtn">
+
+            									<a href="#" class="comt modify">수정</a>
+
+            									<a href="#" class="comt delete">삭제</a>
+
+            								</div>
+
+            							</div>
+
+            							<div class="commentContent"><?php echo $row2['co_content'] ?></div>
+
+            						</div>
+
+            					</li>
+
+            				</ul>
+
+                    <?php
+
+					}
+
+				?>
+
+
+
+    </div>
+
+      <textarea style="background-color:#EFFBFB; color:Black" readonly="readonly"><?php echo $row['co_content'];?></textarea>
+
+
+
+
+
+  </div>
+</div>
+
+
+<?php }
+?></form>
+</div>
+
+
+<script>
+
+	$(document).ready(function () {
+    var commentSet = '';
+		var action = '';
+		$('#commentView').delegate('.comt', 'click', function () {
+			//현재 위치에서 가장 가까운 commentSet 클래스를 변수에 넣는다.
+  		var thisParent = $(this).parents('.commentSet');
+
+			//현재 작성 내용을 변수에 넣고, active 클래스 추가.
+			var commentSet = thisParent.html();
+			thisParent.addClass('active');
+
+			//취소 버튼
+			var commentBtn = '<a href="#" class="addComt cancel">취소</a>';
+
+			//버튼 삭제 & 추가
+			$('.comt').hide();
+			$(this).parents('.commentBtn').append(commentBtn);
+			//commentInfo의 ID를 가져온다.
+
+			var co_no = thisParent.attr('id');
+			//전체 길이에서 3("co_")를 뺀 나머지가 co_no
+
+			co_no = co_no.substr(3, co_no.length);
+
+			//변수 초기화
+			var comment = '';
+			var coId = '';
+			var coContent = '';
+			if($(this).hasClass('write')) {
+				//댓글 쓰기
+				action = 'w';
+				//ID 영역 출력
+				coId = '<input type="text" name="coId" id="coId">';
+			} else if($(this).hasClass('modify')) {
+				//댓글 수정
+				action = 'u';
+				coId = thisParent.find('.coId').text();
+				var coContent = thisParent.find('.commentContent').text();
+			} else if($(this).hasClass('delete')) {
+
+				//댓글 삭제
+				action = 'd';
+			}
+				comment += '<div class="writeComment">';
+				comment += '	<input type="hidden" name="w" value="' + action + '">';
+				comment += '	<input type="hidden" name="co_no" value="' + co_no + '">';
+				comment += '	<table>';
+				comment += '		<tbody>';
+				if(action !== 'd') {
+					comment += '			<tr>';
+					comment += '				<th scope="row"><label for="coId">아이디</label></th>';
+					comment += '				<td>' + coId + '</td>';
+					comment += '			</tr>';
+				}
+				comment += '			<tr>';
+				comment += '				<th scope="row">';
+				comment += '			<label for="coPassword">비밀번호</label></th>';
+				comment += '				<td><input type="password" name="coPassword" id="coPassword"></td>';
+				comment += '			</tr>';
+				if(action !== 'd') {
+					comment += '			<tr>';
+					comment += '				<th scope="row"><label for="coContent">내용</label></th>';
+					comment += '				<td><textarea name="coContent" id="coContent">' + coContent + '</textarea></td>';
+					comment += '			</tr>';
+				}
+				comment += '		</tbody>';
+				comment += '	</table>';
+				comment += '	<div class="btnSet">';
+				comment += '		<input type="submit" value="확인">';
+				comment += '	</div>';
+				comment += '</div>';
+				thisParent.after(comment);
+			return false;
+
+		});
+
+
+
+		$('#commentView').delegate(".cancel", "click", function () {
+				$('.writeComment').remove();
+				$('.commentSet.active').removeClass('active');
+				$('.addComt').remove();
+				$('.comt').show();
+			return false;
+		});
+	});
+
+</script>
+
+
+
+
+
+
+
+
+
 
 						</div>
 					</div><!--/category-tab-->

@@ -19,9 +19,17 @@
 
           		$row = $result->fetch_assoc();
 
+
               $bImage = $_POST['b_image'];
 
               $sql = 'UPDATE shop_board set b_image="' . $bImage . '" where b_no = ' . $bNo;
+
+              $result = $dbConnect->query($sql);
+
+
+
+
+
           	}
 
 
@@ -230,8 +238,6 @@
 </div>
 
 
-
-
 				<div class="col-sm-9 padding-right">
 					<div class="product-details"><!--product-details-->
 						<div class="col-sm-5">
@@ -254,8 +260,9 @@
                      <?php
                      if(isset($bNo)){
                        ?>
-                  <img src="<?=$row['b_image']?>" alt="" name="b_image" >
-                  <input type="hidden" name="b_image" value="<?=$row['b_image']?>" >
+                  <img src="<?=$row['b_image']?>" alt="" name="b_image" >     
+                  <img src="<?=$_FILES['b_image']['name']?>" alt="" name="b_image" >
+                  <input type="hidden" name="b_image" value="<?=$_FILES['b_image']['name']?>" >
 
                   <?php
                   }
