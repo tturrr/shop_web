@@ -1,34 +1,24 @@
 <!DOCTYPE html>
-<!--php와 db teble regi_info 에 연결한다. 그리고
-사용자 정보 id password name email 을 입력받아 저장한다. -->
 <?php
-session_start();
 
-$servername = "localhost";
-$myname = "root";
-$password = "";
-$dbname = "regi_info";
+include "session.php";
+ include "dbConnect.php";
 
-$user_id = $_POST['id'];
-$user_password = $_POST['password'];
-$user_name = $_POST['name'];
-$user_email = $_POST['email'];
+      $_POST["details_id"];
+      $_POST["brand_id"];
+   ?>
 
-  $conn = new mysqli($servername,$myname,$password,$dbname);
-
-
-
-if(!$conn){
-  die ('MySQL connect Error : ' .mysqli_error());
-}
-
-
-$sql = "INSERT INTO register (id,password,name,email)
-VALUES ('$_POST[id]','$_POST[password]','$_POST[name]','$_POST[email]')";
-$resource= $conn->query($sql);
-
-?>
-
+ <script type="text/javascript">
+  function mySubmit(index) {
+    if (index == 1) {
+      document.myForm.action='product-details_modify.php';
+    }
+    if (index == 2) {
+      document.myForm.action='cart.php';
+    }
+    document.myForm.submit();
+  }
+</script>
 
 <html lang="en">
 <head>
@@ -36,7 +26,7 @@ $resource= $conn->query($sql);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>Login | E-Shopper</title>
+    <title>Shop | E-Shopper</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/font-awesome.min.css" rel="stylesheet">
     <link href="css/prettyPhoto.css" rel="stylesheet">
@@ -53,21 +43,19 @@ $resource= $conn->query($sql);
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="images/ico/apple-touch-icon-57-precomposed.png">
-    <script src="js/mySignInForm.js"></script>
-
 </head><!--/head-->
 
 <body>
-  <script src="/js/jquery-1.7.1.min.js">  </script>
 	<header id="header"><!--header-->
 		<div class="header_top"><!--header_top-->
 			<div class="container">
 				<div class="row">
-					<div class="col-sm-6">
+					<div class="col-sm-6 ">
 						<div class="contactinfo">
 							<ul class="nav nav-pills">
 								<li><a href=""><i class="fa fa-phone"></i> +2 95 01 88 821</a></li>
-								<li><a href=""><i class="fa fa-envelope"></i> info@domain.com</a></li>
+								<li><a href=""></i> <?php echo $_SESSION['ses_userid'];
+                    ?> </a></li>
 							</ul>
 						</div>
 					</div>
@@ -124,7 +112,14 @@ $resource= $conn->query($sql);
 								<li><a href=""><i class="fa fa-star"></i> Wishlist</a></li>
 								<li><a href="checkout.html"><i class="fa fa-crosshairs"></i> Checkout</a></li>
 								<li><a href="cart.html"><i class="fa fa-shopping-cart"></i> Cart</a></li>
-								<li><a href="login.php" class="active"><i class="fa fa-lock"></i> Login</a></li>
+
+                                <?php
+                                if(isset($_SESSION['ses_userid'])){
+                                  echo "<li><a href='logout.php'>logout</a></li> ";
+                                }else {
+                                  echo "<li><a href='login.php'>login</a></li> ";
+                                }
+                                  ?>
 							</ul>
 						</div>
 					</div>
@@ -135,7 +130,7 @@ $resource= $conn->query($sql);
 		<div class="header-bottom"><!--header-bottom-->
 			<div class="container">
 				<div class="row">
-					<div class="col-sm-9">
+					<div class="col-sm-9" >
 						<div class="navbar-header">
 							<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
 								<span class="sr-only">Toggle navigation</span>
@@ -147,18 +142,18 @@ $resource= $conn->query($sql);
 						<div class="mainmenu pull-left">
 							<ul class="nav navbar-nav collapse navbar-collapse">
 								<li><a href="index.php">Home</a></li>
-								<li class="dropdown"><a href="#">Shop<i class="fa fa-angle-down"></i></a>
+								<li class="dropdown"><a href="#" class="active">Shop<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
-                                        <li><a href="shop.php">Products</a></li>
-										<li><a href="product-details.html">Product Details</a></li>
+                                        <li><a href="men_shop.php" class="active">Products</a></li>
+
 										<li><a href="checkout.html">Checkout</a></li>
 										<li><a href="cart.html">Cart</a></li>
-										<li><a href="login.html" class="active">Login</a></li>
+										<li><a href="login.php">Login</a></li>
                                     </ul>
                                 </li>
 								<li class="dropdown"><a href="#">Blog<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
-                                        <li><a href="blog.php">Blog List</a></li>
+                                        <li><a href="blog.html">Blog List</a></li>
 										<li><a href="blog-single.html">Blog Single</a></li>
                                     </ul>
                                 </li>
@@ -173,36 +168,190 @@ $resource= $conn->query($sql);
 						</div>
 					</div>
 				</div>
+				</div>
 			</div>
-		</div><!--/header-bottom-->
-	</header><!--/header-->
+	</header>
 
-	<section id="form"><!--form-->
+	<section id="advertisement">
+		<div class="container">
+			<img src="images/shop/advertisement.jpg" alt="" />
+		</div>
+	</section>
+
+	<section>
 		<div class="container">
 			<div class="row">
-				<div class="col-sm-4 col-sm-offset-1">
-					<div class="login-form"><!--login form-->
-						<h2>Login to your account</h2>
-						<form action="signIn.php" method="post" onsubmit="return checkSubmit();">
-							<input type="text" placeholder="id" name="memberId"class="memberId"/>
-							<input type="password" placeholder="password" name="memberPw" class="memberPw" />
-							<span>
-								<input type="checkbox" class="checkbox">
-								Keep me signed in
-							</span>
+				<div class="col-sm-3">
+					<div class="left-sidebar">
+						<h2>Category</h2>
+						<div class="panel-group category-products" id="accordian"><!--category-productsr-->
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title">
+										<a  href="hot.php">
 
-							<button type="submit" class="btn-danger">로그인</button>   <button type="button" onclick="location.href='register.php' ">회원가입</button>
-						</form>
-					</div><!--/login form-->
-				</div>
-				<div class="col-sm-1">
+											HOT
+										</a>
+									</h4>
+								</div>
+								<div id="mens" class="panel-collapse collapse">
+									<div class="panel-body">
+										<ul>
 
+											<li><a href="men_shop.php">Dolce and Gabbana</a></li>
+											<li><a href="">Chanel</a></li>
+											<li><a href="">Gucci</a></li>
+										</ul>
+									</div>
+								</div>
+							</div>
+
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title">
+										<a  href="womens_shop.php">
+									Womens
+										</a>
+									</h4>
+								</div>
+
+							</div>
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title"><a href="men_shop.php">mens</a></h4>
+								</div>
+							</div>
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title"><a href="#">Fashion</a></h4>
+								</div>
+							</div>
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title"><a href="#">Households</a></h4>
+								</div>
+							</div>
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title"><a href="#">Interiors</a></h4>
+								</div>
+							</div>
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title"><a href="#">Clothing</a></h4>
+								</div>
+							</div>
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title"><a href="#">Bags</a></h4>
+								</div>
+							</div>
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title"><a href="#">Shoes</a></h4>
+								</div>
+							</div>
+						</div><!--/category-productsr-->
+
+
+
+
+					</div>
 				</div>
+
+
+				<div class='col-sm-9 padding-right'>
+					<div class="features_items"><!--features_items-->
+						<h2 class="title text-center">HOT items</h2>
+          </div>
+
+
+
+
+               <?php
+               //유니온 코드를 사용하여 테이블을 병합하여 데이터를 뽑아올 수 있다.
+               $sql = "SELECT * FROM man_board union all SELECT * FROM women_board";
+
+               $result = $dbConnect->query($sql);
+
+                while($row = $result->fetch_assoc()) {
+                ?>
+
+
+                  <!--샵 첫번째 아이템 부분.-->
+                  <?php  if($row['divi'] == 0 ) {?>
+                    <form name="myForm" method="post" enctype="multipart/form-data" action="men_details_modify.php?bno=<?php echo $row['b_no'] ?>" >
+                <?php  } else if($row['divi'] == 1) {?>
+                    <form name="myForm" method="post" enctype="multipart/form-data" action="womens_details_modify.php?bno=<?php echo $row['b_no'] ?>" >
+              <?php  }?>
+
+
+            <div class="col-sm-4">
+							<div class="product-image-wrapper">
+								<div class="single-products">
+									<div class="productinfo text-center">
+										<img src="<?php echo $row['b_image']?>"  style="height:300px"  alt="">
+                    <input type="hidden" value="<?php echo $row['b_image']?>" name="b_image" />
+
+                    <h2>	<?php echo $row["b_price"]?>원</h2>
+                    <input type="hidden" name="b_price" value="<?php echo $row["b_price"]?>">
+
+                    <p> 	<?php echo $row["b_title"]      ?></p>
+                    <input type="hidden" name="b_title" value="<?php echo $row['b_title']?>" >
+                    <input type="hidden" name="b_content" value="<?php echo $row["b_content"]?>" >
+                    <input type="hidden" name="b_brand" value="<?php echo $row["b_brand"] ?>" >
+
+									</div>
+									<div class="product-overlay">
+										<div class="overlay-content">
+                      <img src="<?php echo $row['b_image']?>"  style="height:300px"  alt="">
+                      <input type="hidden" value="<?php echo $row['b_image']?>" name="b_image" />
+											<h2><?php echo $row["b_price"]      ?>원</h2>
+											<p><?php echo $row["b_title"];      ?></p>
+										<input type="submit" value="자세히 보기" />
+										</div>
+									</div>
+								</div>
+								<div class="choose">
+									<ul class="nav nav-pills nav-justified">
+                    <!-- <form method="get" action="cart.php" enctype="multipart/form-data" id="cart_form"> -->
+                        </form>
+
+									    <!-- 여기바로수정해 -->
+
+									  <!-- </form> -->
+									</ul>
+                  <form action="cart.php" method="post"enctype="multipart/form-data"  >
+
+
+                    <i><input type="submit" value="장바구니" style="margin-left:93px" /> </i>
+
+
+
+                  </form>
+								</div>
+							</div>
+
+
+						</div>
+            <?php
+              }
+            ?>
+
+
+
+              <!--샵 첫번째 아이템 부분 이곳에 추가버튼을 만들어 동적으로 아이템이 추가 되게 만든다..-->
+
+
+
+					</div><!--features_ite`````ms-->
+				</div>
+
+              <!--이부분은 페이징 처리할떄 1,2,3, 이런식으로 페이지를 보여주는 부분-->
 
 			</div>
 		</div>
-	</section><!--/form-->
-
+	</section>
 
 	<footer id="footer"><!--Footer-->
 		<div class="footer-top">

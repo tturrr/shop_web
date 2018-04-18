@@ -6,15 +6,15 @@ include "session.php";
 
 
 
-$sql = 'SELECT b_no, b_title, b_content, b_price, b_hit, b_brand, b_image from shop_board where b_no = ' . $bNo;
+$sql = 'SELECT b_no, b_title, b_content, b_price, b_hit, b_brand, b_image from women_board where b_no = ' . $bNo;
 
 $result = $dbConnect->query($sql);
 
 $row = $result->fetch_assoc();
 
-if(!empty($bNo) && empty($_COOKIE['shop_board_' . $bNo])) {
+if(!empty($bNo) && empty($_COOKIE['women_board_' . $bNo])) {
 
-		$sql = 'UPDATE shop_board set b_hit = b_hit + 1 where b_no = ' . $bNo;
+		$sql = 'UPDATE women_board set b_hit = b_hit + 1 where b_no = ' . $bNo;
 
 		$result = $dbConnect->query($sql);
 
@@ -34,7 +34,7 @@ if(!empty($bNo) && empty($_COOKIE['shop_board_' . $bNo])) {
 
 		} else {
 
-			setcookie('shop_board_' . $bNo, TRUE, time() + (60 * 60 * 24), '/');
+			setcookie('women_board_' . $bNo, TRUE, time() + (60 * 60 * 24), '/');
 
 		}
 
@@ -285,7 +285,7 @@ function resize(obj) {
 								<li><a href="index.php">Home</a></li>
 								<li class="dropdown"><a href="#">Shop<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
-                                        <li><a href="hot.php">Products</a></li>
+                                        <li><a href="shop.php">Products</a></li>
 										<li><a href="product-details.html" class="active">Product Details</a></li>
 										<li><a href="checkout.html">Checkout</a></li>
 										<li><a href="cart.html">Cart</a></li>
@@ -442,15 +442,15 @@ function resize(obj) {
                         <div style="margin-left : 670px;">
 
                       <div class="btn btn-default get" >
-                        <a href="./product-details.php?bno=<?php echo $row['b_no'] ?>">수정</a>
+                        <a href="./womens_details.php?bno=<?php echo $row['b_no'] ?>">수정</a>
                       </div>
 
                         <div class="btn btn-default get">
-                             <a href="./delete_shop.php?bno=<?php echo $row['b_no'] ?>">삭제</a>
+                             <a href="./womens_delete_shop.php?bno=<?php echo $row['b_no'] ?>">삭제</a>
                         </div>
 
                         <div class="btn btn-default get">
-                             <a href="./hot.php">목록</a>
+                             <a href="./womens_shop.php">목록</a>
                            </div>
                              </div>
                           <?php
@@ -458,7 +458,7 @@ function resize(obj) {
                          ?>
                            <div style="margin-left : 755px;">
                              <div class="btn btn-default get">
-                                  <a href="./hot.php">상품 목록</a>
+                                  <a href="./womens_shop.php">상품 목록</a>
                                 </div>
                                   </div>
                                   <?php
@@ -517,6 +517,7 @@ function resize(obj) {
 										</div>
 									</div>
 								</div>
+
 
 
 

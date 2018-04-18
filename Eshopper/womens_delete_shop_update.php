@@ -12,7 +12,7 @@ include "session.php";
 
 if(isset($bNo)) {
 
-   	$sql = 'SELECT count(b_title) as cnt from shop_board where b_no = ' . $bNo;
+   	$sql = 'SELECT count(b_title) as cnt from women_board where b_no = ' . $bNo;
 
    	$result = $dbConnect->query($sql);
 
@@ -20,7 +20,7 @@ if(isset($bNo)) {
 
     if($row['cnt']) {
 
-    		$sql = 'DELETE from shop_board where b_no = ' . $bNo;
+    		$sql = 'DELETE from women_board where b_no = ' . $bNo;
 
     		$msgState = '삭제';
 
@@ -33,7 +33,7 @@ if(isset($bNo)) {
 
     	$msg = '정상적으로 글이 삭제되었습니다.';
 
-    	$replaceURL = './hot.php';
+    	$replaceURL = './womens_shop.php';
     }
     ?>
 

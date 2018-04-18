@@ -1,7 +1,7 @@
 <?php
 $loginlURL = "login.php";
     include "session.php";
-  
+
 
     unset($_SESSION['ses_userid']);
 

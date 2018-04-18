@@ -2,12 +2,25 @@
 include "session.php";
 include "dbConnect.php";
 
-
+$_POST["details_id"];
+$_POST["brand_id"];
 
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
+
+ <script type="text/javascript">
+  function mySubmit(index) {
+    if (index == 1) {
+      document.myForm.action='product-details_modify.php';
+    }
+    if (index == 2) {
+      document.myForm.action='cart.php';
+    }
+    document.myForm.submit();
+  }
+</script>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -100,7 +113,6 @@ include "dbConnect.php";
 						<div class="shop-menu pull-right">
 							<ul class="nav navbar-nav">
 								<li><a href="#"><i class="fa fa-user"></i> Account</a></li>
-								<li><a href="#"><i class="fa fa-star"></i> Wishlist</a></li>
 								<li><a href="checkout.html"><i class="fa fa-crosshairs"></i> Checkout</a></li>
 								<li><a href="cart.html"><i class="fa fa-shopping-cart"></i> Cart</a></li>
 
@@ -139,7 +151,7 @@ include "dbConnect.php";
 								<li><a href="index.php" class="active">Home</a></li>
 								<li class="dropdown"><a href="#">Shop<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
-                                        <li><a href="shop.php">Products</a></li>
+                                        <li><a href="hot.php">Products</a></li>
 										<li><a href="product-details.php">Product Details</a></li>
 										<li><a href="checkout.html">Checkout</a></li>
 										<li><a href="cart.html">Cart</a></li>
@@ -242,30 +254,8 @@ include "dbConnect.php";
 							<div class="panel panel-default">
 								<div class="panel-heading">
 									<h4 class="panel-title">
-										<a data-toggle="collapse" data-parent="#accordian" href="#sportswear">
-											<span class="badge pull-right"><i class="fa fa-plus"></i></span>
-											Sportswear
-										</a>
-									</h4>
-								</div>
-								<div id="sportswear" class="panel-collapse collapse">
-									<div class="panel-body">
-										<ul>
-											<li><a href="#">Nike </a></li>
-											<li><a href="#">Under Armour </a></li>
-											<li><a href="#">Adidas </a></li>
-											<li><a href="#">Puma</a></li>
-											<li><a href="#">ASICS </a></li>
-										</ul>
-									</div>
-								</div>
-							</div>
-							<div class="panel panel-default">
-								<div class="panel-heading">
-									<h4 class="panel-title">
-										<a data-toggle="collapse" data-parent="#accordian" href="#mens">
-											<span class="badge pull-right"><i class="fa fa-plus"></i></span>
-											Mens
+										<a href="hot.php">
+											HOT
 										</a>
 									</h4>
 								</div>
@@ -290,8 +280,8 @@ include "dbConnect.php";
 							<div class="panel panel-default">
 								<div class="panel-heading">
 									<h4 class="panel-title">
-										<a data-toggle="collapse" data-parent="#accordian" href="#womens">
-											<span class="badge pull-right"><i class="fa fa-plus"></i></span>
+										<a  href="womens_shop.php">
+
 											Womens
 										</a>
 									</h4>
@@ -310,7 +300,7 @@ include "dbConnect.php";
 							</div>
 							<div class="panel panel-default">
 								<div class="panel-heading">
-									<h4 class="panel-title"><a href="#">Kids</a></h4>
+									<h4 class="panel-title"><a href="men_shop.php">mens</a></h4>
 								</div>
 							</div>
 							<div class="panel panel-default">
@@ -345,64 +335,71 @@ include "dbConnect.php";
 							</div>
 						</div><!--/category-products-->
 
-						<div class="brands_products"><!--brands_products-->
-							<h2>Brands</h2>
-							<div class="brands-name">
-								<ul class="nav nav-pills nav-stacked">
-									<li><a href="#"> <span class="pull-right">(50)</span>Acne</a></li>
-									<li><a href="#"> <span class="pull-right">(56)</span>Grüne Erde</a></li>
-									<li><a href="#"> <span class="pull-right">(27)</span>Albiro</a></li>
-									<li><a href="#"> <span class="pull-right">(32)</span>Ronhill</a></li>
-									<li><a href="#"> <span class="pull-right">(5)</span>Oddmolly</a></li>
-									<li><a href="#"> <span class="pull-right">(9)</span>Boudestijn</a></li>
-									<li><a href="#"> <span class="pull-right">(4)</span>Rösch creative culture</a></li>
-								</ul>
-							</div>
-						</div><!--/brands_products-->
 
-						<div class="price-range"><!--price-range-->
-							<h2>Price Range</h2>
-							<div class="well text-center">
-								 <input type="text" class="span2" value="" data-slider-min="0" data-slider-max="600" data-slider-step="5" data-slider-value="[250,450]" id="sl2" ><br />
-								 <b class="pull-left">$ 0</b> <b class="pull-right">$ 600</b>
-							</div>
-						</div><!--/price-range-->
-
-						<div class="shipping text-center"><!--shipping-->
-							<img src="images/home/shipping.jpg" alt="" />
-						</div><!--/shipping-->
 
 					</div>
 				</div>
 
+
+
+
+
+
+
+
 				<div class="col-sm-9 padding-right">
 					<div class="features_items"><!--features_items-->
 						<h2 class="title text-center">Features Items</h2>
-						<div class="col-sm-4">
+            <?php
+            //유니온 코드를 사용하여 테이블을 병합하여 데이터를 뽑아올 수 있다.
+            $sql = "SELECT * FROM man_board union all SELECT * FROM women_board";
+
+            $result = $dbConnect->query($sql);
+
+             while($row = $result->fetch_assoc()) {
+             ?>
+
+             <?php  if($row['divi'] == 0 ) {?>
+               <form name="myForm" method="post" enctype="multipart/form-data" action="men_details_modify.php?bno=<?php echo $row['b_no'] ?>" >
+           <?php  } else if($row['divi'] == 1) {?>
+               <form name="myForm" method="post" enctype="multipart/form-data" action="womens_details_modify.php?bno=<?php echo $row['b_no'] ?>" >
+         <?php  }?>
+						<div class="col-sm-4">z
 							<div class="product-image-wrapper">
 								<div class="single-products">
 										<div class="productinfo text-center">
-											<img src="images/home/product1.jpg" alt="" />
-											<h2>$56</h2>
-											<p>Easy Polo Black Edition</p>
+                      <img src="<?php echo $row['b_image']?>"  style="height:235px"  alt="">
+                      <input type="hidden" value="<?php echo $row['b_image']?>" name="b_image" />
+                      <h2>	<?php echo $row["b_price"]?>원</h2>
+                      <input type="hidden" name="b_price" value="<?php echo $row["b_price"]?>">
+											<p><?php echo $row["b_title"]      ?></p>
+                      <input type="hidden" name="b_title" value="<?php echo $row['b_title']?>" >
+                      <input type="hidden" name="b_content" value="<?php echo $row["b_content"]?>" >
+                      <input type="hidden" name="b_brand" value="<?php echo $row["b_brand"] ?>" >
 											<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
 										</div>
 										<div class="product-overlay">
 											<div class="overlay-content">
-												<h2>$56</h2>
-												<p>Easy Polo Black Edition</p>
-												<a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
+                        <img src="<?php echo $row['b_image']?>"  style="height:235px"  alt="">
+                        <input type="hidden" value="<?php echo $row['b_image']?>" name="b_image" />
+  											<h2><?php echo $row["b_price"]      ?>원</h2>
+  											<p><?php echo $row["b_title"];      ?></p>
+												<input type="submit" value="자세히 보기" />
 											</div>
+
 										</div>
 								</div>
+
+
 								<div class="choose">
-									<ul class="nav nav-pills nav-justified">
-										<li><a href="#"><i class="fa fa-plus-square"></i>Add to wishlist</a></li>
-										<li><a href="#"><i class="fa fa-plus-square"></i>Add to compare</a></li>
-									</ul>
+                  <form action="cart.php" method="post"enctype="multipart/form-data"  >
+                    <i><input type="submit" value="장바구니" style="margin-left:93px" /> </i>
+                  </form>
+
 								</div>
 							</div>
 						</div>
+               <?php } ?>
 						<div class="col-sm-4">
 							<div class="product-image-wrapper">
 								<div class="single-products">

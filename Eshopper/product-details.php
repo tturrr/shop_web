@@ -69,6 +69,17 @@
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="images/ico/apple-touch-icon-57-precomposed.png">
+    <style>
+textarea.autosize { min-height: 50px; }
+</style>
+
+<script>
+function resize(obj) {
+  obj.style.height = "1px";
+  obj.style.height = (12+obj.scrollHeight)+"px";
+}
+</script>
+
 </head><!--/head-->
 
 <body>
@@ -260,7 +271,7 @@
                      <?php
                      if(isset($bNo)){
                        ?>
-                  <img src="<?=$row['b_image']?>" alt="" name="b_image" >     
+                  <img src="<?=$row['b_image']?>" alt="" name="b_image" >
                   <img src="<?=$_FILES['b_image']['name']?>" alt="" name="b_image" >
                   <input type="hidden" name="b_image" value="<?=$_FILES['b_image']['name']?>" >
 
@@ -282,10 +293,10 @@
 
 								<h3>ZOOM</h3>
 							</div>
-							<div id="similar-product" class="carousel slide" data-ride="carousel">
+							<!-- <div id="similar-product" class="carousel slide" data-ride="carousel"> -->
 
 								  <!-- Wrapper for slides -->
-								    <div class="carousel-inner">
+								    <!-- <div class="carousel-inner">
 										<div class="item active">
 										  <a href=""><img src="images/product-details/similar1.jpg" alt=""></a>
 										  <a href=""><img src="images/product-details/similar2.jpg" alt=""></a>
@@ -302,16 +313,16 @@
 										  <a href=""><img src="images/product-details/similar3.jpg" alt=""></a>
 										</div>
 
-									</div>
+									</div> -->
 
 								  <!-- Controls -->
-								  <a class="left item-control" href="#similar-product" data-slide="prev">
+								  <!-- <a class="left item-control" href="#similar-product" data-slide="prev">
 									<i class="fa fa-angle-left"></i>
 								  </a>
 								  <a class="right item-control" href="#similar-product" data-slide="next">
 									<i class="fa fa-angle-right"></i>
 								  </a>
-							</div>
+							</div> -->
 
 						</div>
 
@@ -366,9 +377,7 @@
 
                 <!--이곳에다가 세부정보를 적는다.-->
 
-               <textarea cols = "5" rows="20"  name="b_content" >
-              <?php echo isset($row['b_content'])?$row['b_content']:null?>
-               </textarea>
+               <textarea style="min-width:100%;height:60px;" class="autosize" onkeyup="resize(this)" onkeydown="resize(this)"  id="b_content" name="b_content" ><?php  echo isset($row['b_content'])?$row['b_content']:null?></textarea>
 
      <button input type="submit" class="btn btn-default pull-right" style="background-color:#FE980F" >
          Submit
@@ -384,97 +393,6 @@
 						</div>
 
         	</div><!--/category-tab-->
-
-					<div class="recommended_items"><!--recommended_items-->
-						<h2 class="title -center">recommended items</h2>
-
-						<div id="recommended-item-carousel" class="carousel slide" data-ride="carousel">
-							<div class="carousel-inner">
-								<div class="item active">
-									<div class="col-sm-4">
-										<div class="product-image-wrapper">
-											<div class="single-products">
-												<div class="productinfo -center">
-													<img src="images/home/recommend1.jpg" alt="" />
-													<h2>$56</h2>
-													<p>Easy Polo Black Edition</p>
-													<button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="col-sm-4">
-										<div class="product-image-wrapper">
-											<div class="single-products">
-												<div class="productinfo -center">
-													<img src="images/home/recommend2.jpg" alt="" />
-													<h2>$56</h2>
-													<p>Easy Polo Black Edition</p>
-													<button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="col-sm-4">
-										<div class="product-image-wrapper">
-											<div class="single-products">
-												<div class="productinfo -center">
-													<img src="images/home/recommend3.jpg" alt="" />
-													<h2>$56</h2>
-													<p>Easy Polo Black Edition</p>
-													<button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div class="item">
-									<div class="col-sm-4">
-										<div class="product-image-wrapper">
-											<div class="single-products">
-												<div class="productinfo -center">
-													<img src="images/home/recommend1.jpg" alt="" />
-													<h2>$56</h2>
-													<p>Easy Polo Black Edition</p>
-													<button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="col-sm-4">
-										<div class="product-image-wrapper">
-											<div class="single-products">
-												<div class="productinfo -center">
-													<img src="images/home/recommend2.jpg" alt="" />
-													<h2>$56</h2>
-													<p>Easy Polo Black Edition</p>
-													<button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="col-sm-4">
-										<div class="product-image-wrapper">
-											<div class="single-products">
-												<div class="productinfo -center">
-													<img src="images/home/recommend3.jpg" alt="" />
-													<h2>$56</h2>
-													<p>Easy Polo Black Edition</p>
-													<button type="button" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</button>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-							 <a class="left recommended-item-control" href="#recommended-item-carousel" data-slide="prev">
-								<i class="fa fa-angle-left"></i>
-							  </a>
-							  <a class="right recommended-item-control" href="#recommended-item-carousel" data-slide="next">
-								<i class="fa fa-angle-right"></i>
-							  </a>
-						</div>
-					</div><!--/recommended_items-->
 
 				</div>
 			</div>
