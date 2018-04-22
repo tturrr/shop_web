@@ -160,8 +160,8 @@ include "session.php";
             $currentLimit = ($onePage * $page) - $onePage; //몇 번째의 글부터 가져오는지
 
              $sqlLimit = ' limit ' . $currentLimit . ', ' . $onePage; //limit sql 구문
-
-              $sql = "SELECT * FROM man_board union all SELECT * FROM women_board order by b_hit desc" . $sqlLimit; //원하는 개수만큼 가져온다. (0번째부터 20번째까지
+             //sql 유니온을 사용하여 병합하여 데이터를 추출하고 각각의 서치를 통해서 데이터를 가져온다.
+              $sql = "SELECT * FROM man_board $searchSql union all SELECT * FROM women_board $searchSql order by b_hit desc" . $sqlLimit; //원하는 개수만큼 가져온다. (0번째부터 20번째까지
 
              $result = $dbConnect->query($sql);
 
@@ -313,8 +313,8 @@ include "session.php";
                                 </li>
 								<li class="dropdown"><a href="#">Blog<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
-                                        <li><a href="blog.html">Blog List</a></li>
-										<li><a href="blog-single.html">Blog Single</a></li>
+                                        <li><a href="blog.html">블로그</a></li>
+										<li><a href="Eshopper_chat.php">채팅</a></li>
                                     </ul>
                                 </li>
 

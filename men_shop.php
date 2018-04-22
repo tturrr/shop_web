@@ -306,8 +306,8 @@ $searchSql = '';
                                 </li>
 								<li class="dropdown"><a href="#">Blog<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
-                                        <li><a href="blog.html">Blog List</a></li>
-										<li><a href="blog-single.html">Blog Single</a></li>
+                                        <li><a href="blog.html">블로그</a></li>
+										<li><a href="Eshopper_chat.php">채팅</a></li>
                                     </ul>
                                 </li>
 
