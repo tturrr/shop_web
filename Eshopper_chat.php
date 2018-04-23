@@ -4,12 +4,24 @@ include "dbConnect.php";
 
 
 
+
+ $sql = "SELECT chat_id, chat_content , chat_datetime FROM chat";
+
+ $result = $dbConnect->query($sql);
+
+
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js" ></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.0/jquery.min.js"></script>
+    <script type="text/javascript" src="js/chatSignupForm.js"></script>
     <meta name="description" content="">
     <meta name="author" content="">
     <title>Contact | E-Shopper</title>
@@ -29,6 +41,17 @@ include "dbConnect.php";
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="images/ico/apple-touch-icon-57-precomposed.png">
+    <script>
+  $(document).ready(function(){
+
+          $("#refresh").load(window.location.href+" #refresh ");
+
+  });
+  </script>
+
+
+
+
 </head><!--/head-->
 
 <body>
@@ -154,9 +177,13 @@ include "dbConnect.php";
 		</div><!--/header-bottom-->
 	</header><!--/header-->
 
-<form action="Eshopper_chat.php">
-<div class="container">
-  <div class="container bootstrap snipper">
+
+
+<form action="Eshopper_chat.php" method="post" onsubmit="return chatup();" >
+
+
+<div class="container" >
+  <div class="container bootstrap snipper" id="refresh">
     <div class="row">
       <div class="col-xs-12">
         <div class="portlet portlet-default">
@@ -176,15 +203,22 @@ include "dbConnect.php";
               </div>
               <div class="row">
                 <div class="col-lg-12">
+                  <?php
+                    while($row = $result->fetch_array()){
+
+
+                   ?>
                   <div class="media">
                     <div class="media-body">
-                      <h4 class="media-heading">허건
-                        <span class="small pull-right">오전 12:23분</span>
+                      <h4 class="media-heading"><?php echo ($row['chat_id']);?>
+                        <span class="small pull-right"><?php echo ($row['chat_datetime']); ?> </span>
                         </h4>
                     </div>
-                    <p>안녕하세요. 오랜만입니다. 허건입니다.</p>
+                    <p><?php echo ($row['chat_content']); ?></p>
                   </div>
+                      <?php } ?>
                 </div>
+
               </div>
               <div class="row">
                 <div class="col-lg-12">
@@ -201,19 +235,10 @@ include "dbConnect.php";
               <div class="portlet-footer">
                 <div class="row">
                   <div class="form-group col-xs-4">
-                    <input  type="hidden" id="chatid" name="chatid" value="<?php $_SESSION['ses_userid'] ?> " class="form-control"  maxlength="20" />
-                    <input type="hidden" id="datetime" name="datetime" value="<?php $date = date('y-m-d H:i:s'); ?>">
+                    <input type="hidden" id="chatid" name="chatid" value="<?php echo $_SESSION['ses_userid']; ?> " class="chatid"  maxlength="20" />
+                    <input type="hidden" id="datetime" class="datetime" name="datetime" value="<?php echo date("Y-m-d H:i:s");?>">
                   </div>
-                </div>
-                <div class="row" style="height : 90px">
-                  <div class="form-group col-xs-10">
-                    <textarea style="Height : 80px;" id="chatContent" name="chatContent" class="form-control" placeholder="메시지를 입력하세요" maxlength="100"></textarea>
-                  </div>
-                  <div class="form-group col-xs-2">
-                    <input type="submit" class="btn btn default pull-right" value="전송"></button>
-                    <div class="clearfix"></div>
-                  </div>
-                </div>
+
               </div>
             </div>
           </div>
@@ -222,6 +247,16 @@ include "dbConnect.php";
     </div>
   </div>
 </div>
+</div>
+<div class="row" style="height : 90px">
+  <div class="form-group col-xs-10">
+    <textarea style="Height : 80px; width: 800px;margin-left:205px;" id="chatContent" name="chatContent" class="chatContent" placeholder="메시지를 입력하세요" maxlength="100"></textarea>
+    <input type="submit" id="chat_submit"class="chat_submit" value="전송">
+  </div>
+
+</div>
+<div id="chatLog"></div>
+
 </form>
 
 
