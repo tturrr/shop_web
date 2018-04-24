@@ -1,7 +1,6 @@
 <?php
 include "session.php";
  include "dbConnect.php";
-
  $bNo = $_GET['bno'];
 
 

@@ -9,7 +9,6 @@
 
     $res = $dbConnect->query($sql);
 
-
     if($res->num_rows >= 1){
         echo json_encode(array('res'=>'bad'));
     }else{

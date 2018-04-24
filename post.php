@@ -13,7 +13,7 @@ VALUES('{$chatid}','{$chatContent}','{$datetime}');";
 
 $resource= $dbConnect->query($sql);
 
-
-
+$sql2 = "SELECT chat_id , chat_content , chat_datetime from chat";
+$result = $dbConnect->query($sql2);
 
 ?>

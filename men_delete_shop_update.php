@@ -26,7 +26,7 @@ if(isset($bNo)) {
 
     	//틀리다면 메시지 출력 후 이전화면으로
 
-    	}
+    	} 
     }
     $result = $dbConnect->query($sql);
     if($result) {

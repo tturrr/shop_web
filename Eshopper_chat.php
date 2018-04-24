@@ -3,13 +3,8 @@ include "session.php";
 include "dbConnect.php";
 
 
-
-
- $sql = "SELECT chat_id, chat_content , chat_datetime FROM chat";
-
+ $sql = "SELECT chat_id, chat_content , chat_datetime FROM chat order by id desc";
  $result = $dbConnect->query($sql);
-
-
 ?>
 
 
@@ -22,6 +17,7 @@ include "dbConnect.php";
     <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js" ></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.0/jquery.min.js"></script>
     <script type="text/javascript" src="js/chatSignupForm.js"></script>
+    <script type="text/javascript" src="js/chatSelect.js"></script>
     <meta name="description" content="">
     <meta name="author" content="">
     <title>Contact | E-Shopper</title>
@@ -42,17 +38,18 @@ include "dbConnect.php";
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
     <link rel="apple-touch-icon-precomposed" href="images/ico/apple-touch-icon-57-precomposed.png">
     <script>
-  $(document).ready(function(){
 
-          $("#refresh").load(window.location.href+" #refresh ");
 
-  });
-  </script>
+
+    </script>
+
 
 
 
 
 </head><!--/head-->
+
+
 
 <body>
 	<header id="header"><!--header-->
@@ -179,25 +176,26 @@ include "dbConnect.php";
 
 
 
-<form action="Eshopper_chat.php" method="post" onsubmit="return chatup();" >
+<form  method="post" >
 
 
-<div class="container" >
-  <div class="container bootstrap snipper" id="refresh">
-    <div class="row">
-      <div class="col-xs-12">
-        <div class="portlet portlet-default">
-          <div class="portlet-heading">
+<div class="container"   name="refresh" id="refresh" >
+  <div class="container bootstrap snipper" >
+    <div class="row" >
+      <div class="col-xs-12"  >
+        <div class="portlet portlet-default" >
+          <div class="portlet-heading" >
             <div class="portlet-title">
               <h4><i class="fa fa-circle text-green"></i>실시간 채팅방</h4>
             </div>
+              <p class="text-center text-muted small" id="time"></p>
             <div class="clearfix"></div>
           </div>
-          <div id="chat" class="panel-collapse collapse in">
-            <div class="portlet-body chat-widget" style="overflow-y: auto;  width : auto; Height: 300px;">
+          <div >
+            <div  id="chat" class="chat" style="overflow-y: auto; overflow-x : hidden;  width : auto; Height: 300px;" >
               <div class="row">
                 <div class="col-lg-12">
-                  <p class="text-center text-muted small">2017년 5월 30일</p>
+
 
                 </div>
               </div>
@@ -208,30 +206,19 @@ include "dbConnect.php";
 
 
                    ?>
-                  <div class="media">
+                  <div class="media" id="append">
                     <div class="media-body">
-                      <h4 class="media-heading"><?php echo ($row['chat_id']);?>
-                        <span class="small pull-right"><?php echo ($row['chat_datetime']); ?> </span>
+                      <h4 id="chat_id"class="media-heading"><?php echo ($row['chat_id']);?>
+                        <span id="chat_datetime"class="small pull-right"><?php echo ($row['chat_datetime']); ?> </span>
                         </h4>
                     </div>
-                    <p><?php echo ($row['chat_content']); ?></p>
+                    <p id="chat_content"><?php echo ($row['chat_content']); ?></p>
                   </div>
                       <?php } ?>
                 </div>
 
               </div>
-              <div class="row">
-                <div class="col-lg-12">
-                  <div class="media">
-                    <div class="media-body">
-                      <h4 class="media-heading">장수영
-                        <span class="small pull-right">오전 12:28분</span>
-                        </h4>
-                    </div>
-                    <p>안녕하세요. 저도반갑습니다. 장수영입니다.</p>
-                  </div>
-                </div>
-              </div>
+
               <div class="portlet-footer">
                 <div class="row">
                   <div class="form-group col-xs-4">
@@ -250,8 +237,8 @@ include "dbConnect.php";
 </div>
 <div class="row" style="height : 90px">
   <div class="form-group col-xs-10">
-    <textarea style="Height : 80px; width: 800px;margin-left:205px;" id="chatContent" name="chatContent" class="chatContent" placeholder="메시지를 입력하세요" maxlength="100"></textarea>
-    <input type="submit" id="chat_submit"class="chat_submit" value="전송">
+    <textarea style="Height : 80px; width: 800px;margin-left:0px; " id="chatContent" name="chatContent" class="chatContent" placeholder="메시지를 입력하세요" maxlength="100"></textarea>
+    <input type="submit" name="chat_submit" id="chat_submit"class="chat_submit" value="전송">
   </div>
 
 </div>
@@ -431,3 +418,41 @@ include "dbConnect.php";
     <script src="js/main.js"></script>
 </body>
 </html>
+
+<script>
+
+//
+// function auto_scroll(){
+//   $("#chat").scrollTop($("#chat")[0].scrollHeight);
+// }
+// window.setInterval('auto_scroll()', 200);
+
+
+
+
+function sendRequest() {
+  var httpRequest = new XMLHttpRequest();
+  httpRequest.onreadystatechange = function() {
+      if (httpRequest.readyState == XMLHttpRequest.DONE && httpRequest.status == 200 ) {
+          document.getElementById("time").innerHTML = httpRequest.responseText;
+      }
+  };
+    httpRequest.open("GET", "ajax_request.php");
+    httpRequest.send();
+  }
+sendRequest();
+window.setInterval("sendRequest()", 1000);
+
+
+
+function autoRefresh_sample_div()
+{
+
+var currentLocation = window.location;
+$("#chat").fadeIn('slow').load(currentLocation + ' #chat').fadeIn("slow");
+
+}
+setInterval('autoRefresh_sample_div()', 1000);
+
+
+</script>
